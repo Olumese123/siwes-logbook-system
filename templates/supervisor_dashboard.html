@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}Supervisor Dashboard{% endblock %}
+{% block content %}
+<h2 class="mb-4">My Students</h2>
+
+{% if pending_count %}
+<div class="alert alert-warning">You have {{ pending_count }} log entr{{ 'y' if pending_count == 1 else 'ies' }} awaiting review.</div>
+{% endif %}
+
+{% if students %}
+<div class="table-responsive">
+<table class="table table-hover align-middle">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Matric No.</th>
+      <th>Department</th>
+      <th>Company</th>
+      <th>Logs Submitted</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for s in students %}
+    <tr>
+      <td>{{ s.name }}</td>
+      <td>{{ s.matric_no or '—' }}</td>
+      <td>{{ s.department or '—' }}</td>
+      <td>{{ s.company_name or '—' }}</td>
+      <td>{{ s.log_entries|length }}</td>
+      <td><a href="{{ url_for('view_student_logs', student_id=s.id) }}" class="btn btn-sm btn-primary">View Logs</a></td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+</div>
+{% else %}
+<p class="text-muted">No students assigned to you yet.</p>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}Welcome{% endblock %}
+{% block content %}
+<div class="p-5 mb-4 bg-light rounded-3 text-center">
+  <h1 class="display-5 fw-bold">SIWES Management & Logbook System</h1>
+  <p class="col-lg-8 mx-auto fs-5">
+    Submit and track your weekly SIWES logbook entries online, get supervisor
+    feedback, and keep your placement records in one place.
+  </p>
+  {% if not current_user.is_authenticated %}
+  <div class="d-flex justify-content-center gap-3 mt-3">
+    <a href="{{ url_for('register') }}" class="btn btn-primary btn-lg">Get Started</a>
+    <a href="{{ url_for('login') }}" class="btn btn-outline-secondary btn-lg">Login</a>
+  </div>
+  {% endif %}
+</div>
+
+<div class="row g-4">
+  <div class="col-md-4">
+    <div class="card h-100">
+      <div class="card-body">
+        <h5 class="card-title">Students</h5>
+        <p class="card-text">Log weekly activities, track attendance, and see supervisor comments.</p>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="card h-100">
+      <div class="card-body">
+        <h5 class="card-title">Supervisors</h5>
+        <p class="card-text">Review assigned students' logs and leave feedback.</p>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="card h-100">
+      <div class="card-body">
+        <h5 class="card-title">Admin</h5>
+        <p class="card-text">Manage students and supervisors, and monitor overall progress.</p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

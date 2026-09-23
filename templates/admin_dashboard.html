@@ -1,0 +1,87 @@
+{% extends "base.html" %}
+{% block title %}Admin Dashboard{% endblock %}
+{% block content %}
+<h2 class="mb-4">Admin Dashboard</h2>
+
+<div class="row g-3 mb-4">
+  <div class="col-md-4">
+    <div class="card text-center"><div class="card-body">
+      <h6 class="text-muted">Total Students</h6>
+      <h2>{{ total_students }}</h2>
+    </div></div>
+  </div>
+  <div class="col-md-4">
+    <div class="card text-center"><div class="card-body">
+      <h6 class="text-muted">Total Log Entries</h6>
+      <h2>{{ total_entries }}</h2>
+    </div></div>
+  </div>
+  <div class="col-md-4">
+    <div class="card text-center"><div class="card-body">
+      <h6 class="text-muted">Reviewed Entries</h6>
+      <h2>{{ reviewed_entries }} / {{ total_entries }}</h2>
+    </div></div>
+  </div>
+</div>
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h4>Supervisors</h4>
+  <a href="{{ url_for('new_supervisor') }}" class="btn btn-primary btn-sm">+ Add Supervisor</a>
+</div>
+{% if supervisors %}
+<div class="table-responsive mb-4">
+<table class="table table-sm">
+  <thead><tr><th>Name</th><th>Email</th><th>Students Assigned</th></tr></thead>
+  <tbody>
+    {% for sup in supervisors %}
+    <tr>
+      <td>{{ sup.name }}</td>
+      <td>{{ sup.email }}</td>
+      <td>{{ sup.assigned_students|length }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+</div>
+{% else %}
+<p class="text-muted">No supervisors yet.</p>
+{% endif %}
+
+<h4 class="mb-3">Students</h4>
+{% if students %}
+<div class="table-responsive">
+<table class="table table-hover align-middle">
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Matric No.</th>
+      <th>Department</th>
+      <th>Supervisor</th>
+      <th>Logs</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for s in students %}
+    <tr>
+      <td>{{ s.name }}</td>
+      <td>{{ s.matric_no or '—' }}</td>
+      <td>{{ s.department or '—' }}</td>
+      <td>{{ s.supervisor.name if s.supervisor else '— unassigned —' }}</td>
+      <td>{{ s.log_entries|length }}</td>
+      <td class="d-flex gap-1">
+        <a href="{{ url_for('assign_supervisor', student_id=s.id) }}" class="btn btn-sm btn-outline-primary">Assign Supervisor</a>
+        <form method="POST" action="{{ url_for('delete_student', student_id=s.id) }}"
+              onsubmit="return confirm('Delete this student and all their logs?');">
+          <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
+        </form>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+</div>
+{% else %}
+<p class="text-muted">No students registered yet.</p>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}{{ student.name }}'s Logs{% endblock %}
+{% block content %}
+<h2 class="mb-1">{{ student.name }}'s Logbook</h2>
+<p class="text-muted">{{ student.matric_no or '' }} &middot; {{ student.department or '' }} &middot; {{ student.company_name or 'No company on file' }}</p>
+
+{% if entries %}
+<div class="table-responsive">
+<table class="table table-hover align-middle">
+  <thead>
+    <tr>
+      <th>Week</th>
+      <th>Date</th>
+      <th>Activities</th>
+      <th>Attendance</th>
+      <th>Status</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for entry in entries %}
+    <tr>
+      <td>{{ entry.week_number }}</td>
+      <td>{{ entry.entry_date }}</td>
+      <td>{{ entry.activities[:60] }}{% if entry.activities|length > 60 %}...{% endif %}</td>
+      <td>
+        {% if entry.attended %}<span class="badge bg-success">Present</span>
+        {% else %}<span class="badge bg-secondary">Absent</span>{% endif %}
+      </td>
+      <td>
+        {% if entry.status == 'reviewed' %}<span class="badge bg-primary">Reviewed</span>
+        {% else %}<span class="badge bg-warning text-dark">Pending</span>{% endif %}
+      </td>
+      <td class="d-flex gap-1">
+        <a href="{{ url_for('view_log_entry', entry_id=entry.id) }}" class="btn btn-sm btn-outline-secondary">View</a>
+        <a href="{{ url_for('review_log_entry', entry_id=entry.id) }}" class="btn btn-sm btn-primary">Review</a>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+</div>
+{% else %}
+<p class="text-muted">This student hasn't submitted any log entries yet.</p>
+{% endif %}
+<a href="{{ url_for('supervisor_dashboard') }}" class="btn btn-link">&larr; Back to my students</a>
+{% endblock %}

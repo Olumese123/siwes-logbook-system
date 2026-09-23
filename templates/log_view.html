@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block title %}Log Entry - Week {{ entry.week_number }}{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-8">
+    <div class="card">
+      <div class="card-body">
+        <div class="d-flex justify-content-between">
+          <h3>Week {{ entry.week_number }} Log Entry</h3>
+          <button class="btn btn-sm btn-outline-secondary d-print-none" onclick="window.print()">Print</button>
+        </div>
+        <p class="text-muted">{{ student.name }} ({{ student.matric_no or 'N/A' }}) &middot; {{ entry.entry_date }}</p>
+        <hr>
+        <h6>Activities</h6>
+        <p>{{ entry.activities }}</p>
+        <h6>Skills Learned</h6>
+        <p>{{ entry.skills_learned or '—' }}</p>
+        <h6>Attendance</h6>
+        <p>{{ 'Present' if entry.attended else 'Absent' }}</p>
+        <h6>Status</h6>
+        <p>
+          {% if entry.status == 'reviewed' %}<span class="badge bg-primary">Reviewed</span>
+          {% else %}<span class="badge bg-warning text-dark">Pending</span>{% endif %}
+        </p>
+        {% if entry.supervisor_comment %}
+        <h6>Supervisor Comment</h6>
+        <p class="fst-italic">"{{ entry.supervisor_comment }}"</p>
+        {% endif %}
+      </div>
+    </div>
+    <a href="javascript:history.back()" class="btn btn-link mt-3 d-print-none">&larr; Back</a>
+  </div>
+</div>
+{% endblock %}
